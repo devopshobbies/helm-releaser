@@ -25,6 +25,8 @@ export async function deployHelmChart(
     })
   }
 
-  execSync('kubectl get pods --kubeconfig=kubeconfig')
-  await wait()
+  execSync('kubectl get pods --kubeconfig=kubeconfig', {
+    stdio: 'inherit',
+    cwd: repositoryDirectory
+  })
 }

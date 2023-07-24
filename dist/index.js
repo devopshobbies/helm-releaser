@@ -30,6 +30,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.deployHelmChart = void 0;
 const child_process_1 = __nccwpck_require__(81);
+const repositoryDirectory_1 = __nccwpck_require__(908);
 const core_1 = __nccwpck_require__(186);
 /**
  * This method will installs the helm chart on target kubernetes cluster
@@ -49,8 +50,10 @@ function deployHelmChart(releaseName, genericChart, namespace = 'default') {
                 setTimeout(() => { }, 2000);
             });
         }
-        (0, child_process_1.execSync)('kubectl get pods --kubeconfig=kubeconfig');
-        yield wait();
+        (0, child_process_1.execSync)('kubectl get pods --kubeconfig=kubeconfig', {
+            stdio: 'inherit',
+            cwd: repositoryDirectory_1.repositoryDirectory
+        });
     });
 }
 exports.deployHelmChart = deployHelmChart;
