@@ -17,14 +17,12 @@ async function run(): Promise<void> {
     const valuesPath = core.getInput('valuesPath')
     const releaseName = core.getInput('releaseName')
     const namespace = core.getInput('namespace')
-    const context = core.getInput('context', {required: false})
+    const context = core.getInput('context')
     const token = core.getInput('token', {required: true})
     const kubeConfig = core.getInput('kubeConfig', {required: true})
 
-    execSync(`cat ${valuesPath}`, {stdio: 'inherit', cwd: repositoryDirectory})
-
-    await installKubectl()
     await setupKubectlConfig(kubeConfig)
+
     await installHelm()
     await deployHelmChart(releaseName, genericChart, namespace)
 

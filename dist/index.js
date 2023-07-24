@@ -13,6 +13,45 @@ exports.repositoryDirectory = process.env.GITHUB_WORKSPACE;
 
 /***/ }),
 
+/***/ 207:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.deployHelmChart = void 0;
+const child_process_1 = __nccwpck_require__(81);
+const core_1 = __nccwpck_require__(186);
+/**
+ * This method will installs the helm chart on target kubernetes cluster
+ * please be noticed before using this you need to configure kubectl
+ * and installed helm.
+ *
+ * @author Mehdi Rahimi mehdirahimi.dev@gmail.com
+ * @param {string} releaseName the name of release
+ * @param {string} namespace default value is 'default'
+ * @returns {Promise<void>}
+ */
+function deployHelmChart(releaseName, genericChart, namespace = 'default') {
+    return __awaiter(this, void 0, void 0, function* () {
+        (0, core_1.info)('deploying works');
+        (0, child_process_1.execSync)('kubectl get pods');
+    });
+}
+exports.deployHelmChart = deployHelmChart;
+
+
+/***/ }),
+
 /***/ 443:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -80,81 +119,6 @@ exports.installHelm = installHelm;
 
 /***/ }),
 
-/***/ 166:
-/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
-
-"use strict";
-
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.installKubectl = void 0;
-const repositoryDirectory_1 = __nccwpck_require__(908);
-const error_handler_1 = __nccwpck_require__(719);
-const child_process_1 = __nccwpck_require__(81);
-const core = __importStar(__nccwpck_require__(186));
-/**
- * This method will install the kubectl on our runner
- * please be noticed that it does not setups the config
- * and for that you need to use setupKubectlConfig method.
- *
- * @author Mehdi Rahimi mehdirahimi.dev@gmail.com
- * @returns {Promise<void>}
- */
-function installKubectl() {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            core.info('Downloading kubectl config file');
-            (0, child_process_1.execSync)('curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"', { stdio: 'inherit', cwd: repositoryDirectory_1.repositoryDirectory });
-            (0, child_process_1.execSync)('chmod +x kubectl', { stdio: 'inherit', cwd: repositoryDirectory_1.repositoryDirectory });
-            core.info('Moving the kubectl binary to /usr/local/bin/');
-            (0, child_process_1.execSync)('sudo mv kubectl /usr/local/bin/', {
-                stdio: 'inherit',
-                cwd: repositoryDirectory_1.repositoryDirectory
-            });
-            core.info('Kubectl installation is done !');
-        }
-        catch (error) {
-            core.error('Failed to install kubectl');
-            (0, error_handler_1.errorHandler)(error);
-        }
-    });
-}
-exports.installKubectl = installKubectl;
-
-
-/***/ }),
-
 /***/ 453:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -209,7 +173,7 @@ function setupKubectlConfig(kubeConfig) {
             if (!kubeConfig) {
                 throw new Error('No kubeConfig provided');
             }
-            core.info('Preparing the kubeconfig file');
+            core.info('Preparing the kubeConfig file');
             yield (0, promises_1.writeFile)('kubeconfig', kubeConfig);
             (0, child_process_1.execSync)(`export KUBECONFIG=${path_1.default.join(repositoryDirectory_1.repositoryDirectory || '', 'kubeconfig')}`, { stdio: 'inherit', cwd: repositoryDirectory_1.repositoryDirectory });
             core.info('kubectl installation and configuration complete');
@@ -330,11 +294,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(186));
 const install_helm_1 = __nccwpck_require__(443);
-const install_kubectl_1 = __nccwpck_require__(166);
 const setup_kubectl_config_1 = __nccwpck_require__(453);
-const child_process_1 = __nccwpck_require__(81);
-const repositoryDirectory_1 = __nccwpck_require__(908);
 const error_handler_1 = __nccwpck_require__(719);
+const deploy_helm_1 = __nccwpck_require__(207);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -342,15 +304,15 @@ function run() {
                 required: true,
                 trimWhitespace: true
             });
-            const valuesPath = core.getInput('valuesPath', { required: true });
-            const context = core.getInput('context', { required: true });
+            const valuesPath = core.getInput('valuesPath');
+            const releaseName = core.getInput('releaseName');
+            const namespace = core.getInput('namespace');
+            const context = core.getInput('context');
             const token = core.getInput('token', { required: true });
             const kubeConfig = core.getInput('kubeConfig', { required: true });
-            (0, child_process_1.execSync)(`cat ${valuesPath}`, { stdio: 'inherit', cwd: repositoryDirectory_1.repositoryDirectory });
-            yield (0, install_kubectl_1.installKubectl)();
             yield (0, setup_kubectl_config_1.setupKubectlConfig)(kubeConfig);
             yield (0, install_helm_1.installHelm)();
-            (0, child_process_1.execSync)(`ls -lha`, { stdio: 'inherit', cwd: repositoryDirectory_1.repositoryDirectory });
+            yield (0, deploy_helm_1.deployHelmChart)(releaseName, genericChart, namespace);
             return;
         }
         catch (error) {
