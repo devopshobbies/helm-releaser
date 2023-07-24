@@ -19,5 +19,5 @@ export async function deployHelmChart(
 ): Promise<void> {
   info('deploying works')
 
-  execSync('kubectl get pods')
+  execSync('kubectl get pods --kubeconfig=kubeconfig')
 }

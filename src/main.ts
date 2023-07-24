@@ -21,8 +21,8 @@ async function run(): Promise<void> {
     const token = core.getInput('token', {required: true})
     const kubeConfig = core.getInput('kubeConfig', {required: true})
 
+    await installKubectl()
     await setupKubectlConfig(kubeConfig)
-
     await installHelm()
     await deployHelmChart(releaseName, genericChart, namespace)
 

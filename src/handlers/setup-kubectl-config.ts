@@ -19,7 +19,7 @@ export async function setupKubectlConfig(kubeConfig: string) {
       {stdio: 'inherit', cwd: repositoryDirectory}
     )
 
-    core.info('kubectl installation and configuration complete')
+    core.info('kubectl configuration complete')
   } catch (error) {
     core.error('Failed to configure the kubectl')
     errorHandler(error)
