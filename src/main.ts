@@ -6,6 +6,7 @@ import {execSync} from 'child_process'
 import {repositoryDirectory} from './constants/repositoryDirectory'
 import {errorHandler} from './helpers/error-handler'
 import {deployHelmChart} from './handlers/deploy-helm'
+import {setKubectlContext} from './handlers/kubectl-set-context'
 
 async function run(): Promise<void> {
   try {
@@ -24,6 +25,7 @@ async function run(): Promise<void> {
     await installKubectl()
     await setupKubectlConfig(kubeConfig)
     await installHelm()
+    await setKubectlContext(context)
     await deployHelmChart(releaseName, genericChart, namespace)
 
     return

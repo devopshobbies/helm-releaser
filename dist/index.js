@@ -194,6 +194,73 @@ exports.installKubectl = installKubectl;
 
 /***/ }),
 
+/***/ 741:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.setKubectlContext = void 0;
+const child_process_1 = __nccwpck_require__(81);
+const repositoryDirectory_1 = __nccwpck_require__(908);
+const core = __importStar(__nccwpck_require__(186));
+const error_handler_1 = __nccwpck_require__(719);
+function setKubectlContext(context) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            if (!context) {
+                return;
+            }
+            core.info('Configuring context');
+            (0, child_process_1.execSync)(`kubectl config set-context ${context}`, {
+                stdio: 'inherit',
+                cwd: repositoryDirectory_1.repositoryDirectory
+            });
+            core.info(`Context successfully is set to ${context}`);
+        }
+        catch (error) {
+            core.error('error in setting context');
+            (0, error_handler_1.errorHandler)(error);
+        }
+    });
+}
+exports.setKubectlContext = setKubectlContext;
+
+
+/***/ }),
+
 /***/ 453:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -373,6 +440,7 @@ const install_kubectl_1 = __nccwpck_require__(166);
 const setup_kubectl_config_1 = __nccwpck_require__(453);
 const error_handler_1 = __nccwpck_require__(719);
 const deploy_helm_1 = __nccwpck_require__(207);
+const kubectl_set_context_1 = __nccwpck_require__(741);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -389,6 +457,7 @@ function run() {
             yield (0, install_kubectl_1.installKubectl)();
             yield (0, setup_kubectl_config_1.setupKubectlConfig)(kubeConfig);
             yield (0, install_helm_1.installHelm)();
+            yield (0, kubectl_set_context_1.setKubectlContext)(context);
             yield (0, deploy_helm_1.deployHelmChart)(releaseName, genericChart, namespace);
             return;
         }

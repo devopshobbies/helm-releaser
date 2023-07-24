@@ -3,7 +3,7 @@ import {repositoryDirectory} from '../constants/repositoryDirectory'
 import * as core from '@actions/core'
 import {errorHandler} from '../helpers/error-handler'
 
-export async function setContext(context?: string) {
+export async function setKubectlContext(context?: string) {
   try {
     if (!context) {
       return
