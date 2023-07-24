@@ -244,7 +244,7 @@ function setKubectlContext(context) {
                 return;
             }
             core.info('Configuring context');
-            (0, child_process_1.execSync)(`kubectl config use-context ${context}`, {
+            (0, child_process_1.execSync)(`kubectl config use-context ${context} --kubeconfig=kubeconfig`, {
                 stdio: 'inherit',
                 cwd: repositoryDirectory_1.repositoryDirectory
             });

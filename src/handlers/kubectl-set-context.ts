@@ -10,7 +10,7 @@ export async function setKubectlContext(context?: string) {
     }
 
     core.info('Configuring context')
-    execSync(`kubectl config use-context ${context}`, {
+    execSync(`kubectl config use-context ${context} --kubeconfig=kubeconfig`, {
       stdio: 'inherit',
       cwd: repositoryDirectory
     })
