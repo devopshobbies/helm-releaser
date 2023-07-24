@@ -13,16 +13,18 @@ async function run(): Promise<void> {
       trimWhitespace: true
     })
 
-    execSync('ls', {stdio: 'inherit', cwd: repositoryDirectory})
-
     const valuesPath = core.getInput('valuesPath', {required: true})
     const context = core.getInput('context', {required: true})
     const token = core.getInput('token', {required: true})
     const kubeConfig = core.getInput('kubeConfig', {required: true})
 
+    execSync(`cat ${valuesPath}`, {stdio: 'inherit', cwd: repositoryDirectory})
+
     await installKubectl()
     await setupKubectlConfig(kubeConfig)
     await installHelm()
+
+    execSync(`ls -lha`, {stdio: 'inherit', cwd: repositoryDirectory})
 
     return
   } catch (error) {

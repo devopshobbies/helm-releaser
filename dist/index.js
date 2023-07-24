@@ -342,14 +342,15 @@ function run() {
                 required: true,
                 trimWhitespace: true
             });
-            (0, child_process_1.execSync)('ls', { stdio: 'inherit', cwd: repositoryDirectory_1.repositoryDirectory });
             const valuesPath = core.getInput('valuesPath', { required: true });
             const context = core.getInput('context', { required: true });
             const token = core.getInput('token', { required: true });
             const kubeConfig = core.getInput('kubeConfig', { required: true });
+            (0, child_process_1.execSync)(`cat ${valuesPath}`, { stdio: 'inherit', cwd: repositoryDirectory_1.repositoryDirectory });
             yield (0, install_kubectl_1.installKubectl)();
             yield (0, setup_kubectl_config_1.setupKubectlConfig)(kubeConfig);
             yield (0, install_helm_1.installHelm)();
+            (0, child_process_1.execSync)(`ls -lha`, { stdio: 'inherit', cwd: repositoryDirectory_1.repositoryDirectory });
             return;
         }
         catch (error) {
