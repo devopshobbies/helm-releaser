@@ -4,6 +4,7 @@ import {installKubectl} from './handlers/install-kubectl'
 import {setupKubectlConfig} from './handlers/setup-kubectl-config'
 import {execSync} from 'child_process'
 import {repositoryDirectory} from './constants/repositoryDirectory'
+import {errorHandler} from './helpers/error-handler'
 
 async function run(): Promise<void> {
   try {
@@ -12,9 +13,7 @@ async function run(): Promise<void> {
       trimWhitespace: true
     })
 
-    console.log(
-      execSync('ls', {stdio: 'inherit', cwd: repositoryDirectory}).toString()
-    )
+    execSync('ls', {stdio: 'inherit', cwd: repositoryDirectory})
 
     const valuesPath = core.getInput('valuesPath', {required: true})
     const context = core.getInput('context', {required: true})
@@ -27,8 +26,8 @@ async function run(): Promise<void> {
 
     return
   } catch (error) {
-    if (error instanceof Error) core.setFailed(error.message)
-    throw error
+    core.error('Problem in releasing your helm chart')
+    errorHandler(error)
   }
 }
 

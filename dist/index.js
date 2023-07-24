@@ -334,6 +334,7 @@ const install_kubectl_1 = __nccwpck_require__(166);
 const setup_kubectl_config_1 = __nccwpck_require__(453);
 const child_process_1 = __nccwpck_require__(81);
 const repositoryDirectory_1 = __nccwpck_require__(908);
+const error_handler_1 = __nccwpck_require__(719);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -341,7 +342,7 @@ function run() {
                 required: true,
                 trimWhitespace: true
             });
-            console.log((0, child_process_1.execSync)('ls', { stdio: 'inherit', cwd: repositoryDirectory_1.repositoryDirectory }).toString());
+            (0, child_process_1.execSync)('ls', { stdio: 'inherit', cwd: repositoryDirectory_1.repositoryDirectory });
             const valuesPath = core.getInput('valuesPath', { required: true });
             const context = core.getInput('context', { required: true });
             const token = core.getInput('token', { required: true });
@@ -352,9 +353,8 @@ function run() {
             return;
         }
         catch (error) {
-            if (error instanceof Error)
-                core.setFailed(error.message);
-            throw error;
+            core.error('Problem in releasing your helm chart');
+            (0, error_handler_1.errorHandler)(error);
         }
     });
 }
