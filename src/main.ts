@@ -1,18 +1,28 @@
 import * as core from '@actions/core'
-import {wait} from './wait'
+import {installHelm} from './handlers/install-helm'
+import {installKubectl} from './handlers/install-kubectl'
+import {setupKubectlConfig} from './handlers/setup-kubectl-config'
 
 async function run(): Promise<void> {
   try {
-    const ms: string = core.getInput('milliseconds')
-    core.debug(`Waiting ${ms} milliseconds ...`) // debug is only output if you set the secret `ACTIONS_STEP_DEBUG` to true
+    const genericChart = core.getInput('genericChart', {
+      required: true,
+      trimWhitespace: true
+    })
 
-    core.debug(new Date().toTimeString())
-    await wait(parseInt(ms, 10))
-    core.debug(new Date().toTimeString())
+    const valuesPath = core.getInput('valuesPath', {required: true})
+    const context = core.getInput('context', {required: true})
+    const token = core.getInput('token', {required: true})
+    const kubeConfig = core.getInput('kubeConfig', {required: true})
 
-    core.setOutput('time', new Date().toTimeString())
+    await installKubectl()
+    await setupKubectlConfig(kubeConfig)
+    await installHelm()
+
+    return
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message)
+    throw error
   }
 }
 

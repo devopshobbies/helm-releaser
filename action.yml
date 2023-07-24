@@ -1,11 +1,29 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'Helm releaser'
+description: 'Combination of a big verity of features for deploying helm chart'
+author: 'devopshobbies'
 inputs:
-  milliseconds: # change this
+  genericChart:
     required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+    description: 'The generic chart address'
+
+  context:
+    required: true
+    description: 'The kubernetes target context'
+    default: 'default'
+
+  token:
+    required: true
+    description: 'Github token'
+
+  kubeConfig:
+    required: true
+    description: 'Kubernetes config file to connect'
+
+  valuesPath:
+    required: false
+    description: 'The values path to use it with generic chart'
+    default: '.helm/values.yaml'
+
 runs:
   using: 'node16'
   main: 'dist/index.js'
