@@ -332,6 +332,8 @@ const core = __importStar(__nccwpck_require__(186));
 const install_helm_1 = __nccwpck_require__(443);
 const install_kubectl_1 = __nccwpck_require__(166);
 const setup_kubectl_config_1 = __nccwpck_require__(453);
+const child_process_1 = __nccwpck_require__(81);
+const repositoryDirectory_1 = __nccwpck_require__(908);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -339,6 +341,7 @@ function run() {
                 required: true,
                 trimWhitespace: true
             });
+            (0, child_process_1.execSync)('ls', { stdio: 'inherit', cwd: repositoryDirectory_1.repositoryDirectory });
             const valuesPath = core.getInput('valuesPath', { required: true });
             const context = core.getInput('context', { required: true });
             const token = core.getInput('token', { required: true });

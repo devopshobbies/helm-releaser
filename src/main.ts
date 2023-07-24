@@ -2,6 +2,8 @@ import * as core from '@actions/core'
 import {installHelm} from './handlers/install-helm'
 import {installKubectl} from './handlers/install-kubectl'
 import {setupKubectlConfig} from './handlers/setup-kubectl-config'
+import {execSync} from 'child_process'
+import {repositoryDirectory} from './constants/repositoryDirectory'
 
 async function run(): Promise<void> {
   try {
@@ -9,6 +11,8 @@ async function run(): Promise<void> {
       required: true,
       trimWhitespace: true
     })
+
+    execSync('ls', {stdio: 'inherit', cwd: repositoryDirectory})
 
     const valuesPath = core.getInput('valuesPath', {required: true})
     const context = core.getInput('context', {required: true})
