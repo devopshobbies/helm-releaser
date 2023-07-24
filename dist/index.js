@@ -1,6 +1,295 @@
 require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ 908:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.repositoryDirectory = void 0;
+exports.repositoryDirectory = process.env.GITHUB_WORKSPACE;
+
+
+/***/ }),
+
+/***/ 443:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.installHelm = void 0;
+const core = __importStar(__nccwpck_require__(186));
+const child_process_1 = __nccwpck_require__(81);
+const error_handler_1 = __nccwpck_require__(719);
+const repositoryDirectory_1 = __nccwpck_require__(908);
+/**
+ * Downloads the helm installer bash script and runs
+ * the script to install the helm.
+ * @author Mehdi Rahimi mehdirahimi.dev@gmail.com
+ * @returns {Promise<void>}
+ */
+function installHelm(_options) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            core.info('Installing helm');
+            (0, child_process_1.execSync)('curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash', { stdio: 'inherit', cwd: repositoryDirectory_1.repositoryDirectory });
+            console.log('Helm is installed');
+        }
+        catch (error) {
+            core.error('Failed to install helm');
+            (0, error_handler_1.errorHandler)(error);
+        }
+    });
+}
+exports.installHelm = installHelm;
+
+
+/***/ }),
+
+/***/ 166:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.installKubectl = void 0;
+const repositoryDirectory_1 = __nccwpck_require__(908);
+const error_handler_1 = __nccwpck_require__(719);
+const child_process_1 = __nccwpck_require__(81);
+const core = __importStar(__nccwpck_require__(186));
+/**
+ * This method will install the kubectl on our runner
+ * please be noticed that it does not setups the config
+ * and for that you need to use setupKubectlConfig method.
+ *
+ * @author Mehdi Rahimi mehdirahimi.dev@gmail.com
+ * @returns {Promise<void>}
+ */
+function installKubectl() {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            core.info('Downloading kubectl config file');
+            (0, child_process_1.execSync)('curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"', { stdio: 'inherit', cwd: repositoryDirectory_1.repositoryDirectory });
+            (0, child_process_1.execSync)('chmod +x kubectl', { stdio: 'inherit', cwd: repositoryDirectory_1.repositoryDirectory });
+            core.info('Moving the kubectl binary to /usr/local/bin/');
+            (0, child_process_1.execSync)('sudo mv kubectl /usr/local/bin/', {
+                stdio: 'inherit',
+                cwd: repositoryDirectory_1.repositoryDirectory
+            });
+            core.info('Kubectl installation is done !');
+        }
+        catch (error) {
+            core.error('Failed to install kubectl');
+            (0, error_handler_1.errorHandler)(error);
+        }
+    });
+}
+exports.installKubectl = installKubectl;
+
+
+/***/ }),
+
+/***/ 453:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.setupKubectlConfig = void 0;
+const path_1 = __importDefault(__nccwpck_require__(17));
+const promises_1 = __nccwpck_require__(292);
+const core = __importStar(__nccwpck_require__(186));
+const child_process_1 = __nccwpck_require__(81);
+const error_handler_1 = __nccwpck_require__(719);
+const repositoryDirectory_1 = __nccwpck_require__(908);
+function setupKubectlConfig(kubeConfig) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            if (!kubeConfig) {
+                throw new Error('No kubeConfig provided');
+            }
+            core.info('Preparing the kubeconfig file');
+            yield (0, promises_1.writeFile)('kubeconfig', kubeConfig);
+            (0, child_process_1.execSync)(`export KUBECONFIG=${path_1.default.join(repositoryDirectory_1.repositoryDirectory || '', 'kubeconfig')}`, { stdio: 'inherit', cwd: repositoryDirectory_1.repositoryDirectory });
+            core.info('kubectl installation and configuration complete');
+        }
+        catch (error) {
+            core.error('Failed to configure the kubectl');
+            (0, error_handler_1.errorHandler)(error);
+        }
+    });
+}
+exports.setupKubectlConfig = setupKubectlConfig;
+
+
+/***/ }),
+
+/***/ 683:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.convertObjectToJson = void 0;
+function convertObjectToJson(object) {
+    let jsonError = {};
+    Object.getOwnPropertyNames(object).forEach(key => {
+        jsonError[key] = object[key];
+    });
+    return JSON.stringify(jsonError, null, 2);
+}
+exports.convertObjectToJson = convertObjectToJson;
+
+
+/***/ }),
+
+/***/ 719:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.errorHandler = void 0;
+const core = __importStar(__nccwpck_require__(186));
+const convert_object_json_1 = __nccwpck_require__(683);
+function errorHandler(error) {
+    if (error instanceof Error) {
+        core.error(error.message);
+    }
+    else {
+        core.error((0, convert_object_json_1.convertObjectToJson)(error));
+    }
+    process.exit(1);
+}
+exports.errorHandler = errorHandler;
+
+
+/***/ }),
+
 /***/ 109:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -40,55 +329,33 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(186));
-const wait_1 = __nccwpck_require__(817);
+const install_helm_1 = __nccwpck_require__(443);
+const install_kubectl_1 = __nccwpck_require__(166);
+const setup_kubectl_config_1 = __nccwpck_require__(453);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const ms = core.getInput('milliseconds');
-            core.debug(`Waiting ${ms} milliseconds ...`); // debug is only output if you set the secret `ACTIONS_STEP_DEBUG` to true
-            core.debug(new Date().toTimeString());
-            yield (0, wait_1.wait)(parseInt(ms, 10));
-            core.debug(new Date().toTimeString());
-            core.setOutput('time', new Date().toTimeString());
+            const genericChart = core.getInput('genericChart', {
+                required: true,
+                trimWhitespace: true
+            });
+            const valuesPath = core.getInput('valuesPath', { required: true });
+            const context = core.getInput('context', { required: true });
+            const token = core.getInput('token', { required: true });
+            const kubeConfig = core.getInput('kubeConfig', { required: true });
+            yield (0, install_kubectl_1.installKubectl)();
+            yield (0, setup_kubectl_config_1.setupKubectlConfig)(kubeConfig);
+            yield (0, install_helm_1.installHelm)();
+            return;
         }
         catch (error) {
             if (error instanceof Error)
                 core.setFailed(error.message);
+            throw error;
         }
     });
 }
 run();
-
-
-/***/ }),
-
-/***/ 817:
-/***/ (function(__unused_webpack_module, exports) {
-
-"use strict";
-
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.wait = void 0;
-function wait(milliseconds) {
-    return __awaiter(this, void 0, void 0, function* () {
-        return new Promise(resolve => {
-            if (isNaN(milliseconds)) {
-                throw new Error('milliseconds not a number');
-            }
-            setTimeout(() => resolve('done!'), milliseconds);
-        });
-    });
-}
-exports.wait = wait;
 
 
 /***/ }),
@@ -1818,6 +2085,10 @@ function checkBypass(reqUrl) {
     if (!reqUrl.hostname) {
         return false;
     }
+    const reqHost = reqUrl.hostname;
+    if (isLoopbackAddress(reqHost)) {
+        return true;
+    }
     const noProxy = process.env['no_proxy'] || process.env['NO_PROXY'] || '';
     if (!noProxy) {
         return false;
@@ -1843,13 +2114,24 @@ function checkBypass(reqUrl) {
         .split(',')
         .map(x => x.trim().toUpperCase())
         .filter(x => x)) {
-        if (upperReqHosts.some(x => x === upperNoProxyItem)) {
+        if (upperNoProxyItem === '*' ||
+            upperReqHosts.some(x => x === upperNoProxyItem ||
+                x.endsWith(`.${upperNoProxyItem}`) ||
+                (upperNoProxyItem.startsWith('.') &&
+                    x.endsWith(`${upperNoProxyItem}`)))) {
             return true;
         }
     }
     return false;
 }
 exports.checkBypass = checkBypass;
+function isLoopbackAddress(host) {
+    const hostLower = host.toLowerCase();
+    return (hostLower === 'localhost' ||
+        hostLower.startsWith('127.') ||
+        hostLower.startsWith('[::1]') ||
+        hostLower.startsWith('[0:0:0:0:0:0:0:1]'));
+}
 //# sourceMappingURL=proxy.js.map
 
 /***/ }),
@@ -2788,6 +3070,14 @@ module.exports = require("assert");
 
 /***/ }),
 
+/***/ 81:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("child_process");
+
+/***/ }),
+
 /***/ 113:
 /***/ ((module) => {
 
@@ -2809,6 +3099,14 @@ module.exports = require("events");
 
 "use strict";
 module.exports = require("fs");
+
+/***/ }),
+
+/***/ 292:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("fs/promises");
 
 /***/ }),
 
