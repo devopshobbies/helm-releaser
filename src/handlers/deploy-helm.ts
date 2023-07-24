@@ -18,4 +18,6 @@ export async function deployHelmChart(
   namespace: string = 'default'
 ): Promise<void> {
   info('deploying works')
+
+  execSync('kubectl get pods')
 }

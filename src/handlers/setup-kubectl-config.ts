@@ -11,7 +11,7 @@ export async function setupKubectlConfig(kubeConfig: string) {
       throw new Error('No kubeConfig provided')
     }
 
-    core.info('Preparing the kubeconfig file')
+    core.info('Preparing the kubeConfig file')
     await writeFile('kubeconfig', kubeConfig)
 
     execSync(

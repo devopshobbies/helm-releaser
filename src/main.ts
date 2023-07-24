@@ -5,6 +5,7 @@ import {setupKubectlConfig} from './handlers/setup-kubectl-config'
 import {execSync} from 'child_process'
 import {repositoryDirectory} from './constants/repositoryDirectory'
 import {errorHandler} from './helpers/error-handler'
+import {deployHelmChart} from './handlers/deploy-helm'
 
 async function run(): Promise<void> {
   try {
@@ -13,8 +14,10 @@ async function run(): Promise<void> {
       trimWhitespace: true
     })
 
-    const valuesPath = core.getInput('valuesPath', {required: true})
-    const context = core.getInput('context', {required: true})
+    const valuesPath = core.getInput('valuesPath')
+    const releaseName = core.getInput('releaseName')
+    const namespace = core.getInput('namespace')
+    const context = core.getInput('context', {required: false})
     const token = core.getInput('token', {required: true})
     const kubeConfig = core.getInput('kubeConfig', {required: true})
 
@@ -23,8 +26,7 @@ async function run(): Promise<void> {
     await installKubectl()
     await setupKubectlConfig(kubeConfig)
     await installHelm()
-
-    execSync(`ls -lha`, {stdio: 'inherit', cwd: repositoryDirectory})
+    await deployHelmChart(releaseName, genericChart, namespace)
 
     return
   } catch (error) {

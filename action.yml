@@ -7,9 +7,8 @@ inputs:
     description: 'The generic chart address'
 
   context:
-    required: true
+    required: false
     description: 'The kubernetes target context'
-    default: 'default'
 
   token:
     required: true
@@ -19,10 +18,20 @@ inputs:
     required: true
     description: 'Kubernetes config file to connect'
 
+  releaseName:
+    required: false
+    description: 'The name of your release'
+    default: ${{ github.repository.name }}
+
   valuesPath:
     required: false
     description: 'The values path to use it with generic chart'
     default: '.helm/values.yaml'
+
+  namespace:
+    required: false
+    description: 'The namespace you want to deploy your services'
+    default: 'default'
 
 runs:
   using: 'node16'
