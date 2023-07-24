@@ -19,5 +19,12 @@ export async function deployHelmChart(
 ): Promise<void> {
   info('deploying works')
 
+  function wait() {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {}, 2000)
+    })
+  }
+
   execSync('kubectl get pods --kubeconfig=kubeconfig')
+  await wait()
 }

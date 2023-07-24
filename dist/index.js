@@ -44,7 +44,13 @@ const core_1 = __nccwpck_require__(186);
 function deployHelmChart(releaseName, genericChart, namespace = 'default') {
     return __awaiter(this, void 0, void 0, function* () {
         (0, core_1.info)('deploying works');
+        function wait() {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => { }, 2000);
+            });
+        }
         (0, child_process_1.execSync)('kubectl get pods --kubeconfig=kubeconfig');
+        yield wait();
     });
 }
 exports.deployHelmChart = deployHelmChart;
