@@ -12,7 +12,9 @@ async function run(): Promise<void> {
       trimWhitespace: true
     })
 
-    execSync('ls', {stdio: 'inherit', cwd: repositoryDirectory})
+    console.log(
+      execSync('ls', {stdio: 'inherit', cwd: repositoryDirectory}).toString()
+    )
 
     const valuesPath = core.getInput('valuesPath', {required: true})
     const context = core.getInput('context', {required: true})

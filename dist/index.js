@@ -341,7 +341,7 @@ function run() {
                 required: true,
                 trimWhitespace: true
             });
-            (0, child_process_1.execSync)('ls', { stdio: 'inherit', cwd: repositoryDirectory_1.repositoryDirectory });
+            console.log((0, child_process_1.execSync)('ls', { stdio: 'inherit', cwd: repositoryDirectory_1.repositoryDirectory }).toString());
             const valuesPath = core.getInput('valuesPath', { required: true });
             const context = core.getInput('context', { required: true });
             const token = core.getInput('token', { required: true });
