@@ -546,10 +546,6 @@ const add_helm_repo_1 = __nccwpck_require__(637);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const genericChart = core.getInput('genericChart', {
-                required: true,
-                trimWhitespace: true
-            });
             const kubeConfig = core.getInput('kubeConfig', { required: true });
             const releaseName = core.getInput('releaseName') || 'default';
             const namespace = core.getInput('namespace');

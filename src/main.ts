@@ -9,11 +9,6 @@ import {addHelmRepository} from './handlers/add-helm-repo'
 
 async function run(): Promise<void> {
   try {
-    const genericChart = core.getInput('genericChart', {
-      required: true,
-      trimWhitespace: true
-    })
-
     const kubeConfig = core.getInput('kubeConfig', {required: true})
     const releaseName = core.getInput('releaseName') || 'default'
     const namespace = core.getInput('namespace')
