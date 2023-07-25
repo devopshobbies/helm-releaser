@@ -1,6 +1,7 @@
+import * as core from '@actions/core'
+import {errorHandler} from '../helpers/error-handler'
 import {execSync} from 'child_process'
 import {repositoryDirectory} from '../constants/repositoryDirectory'
-import {info} from '@actions/core'
 
 /**
  * This method will installs the helm chart on target kubernetes cluster
@@ -12,21 +13,30 @@ import {info} from '@actions/core'
  * @param {string} namespace default value is 'default'
  * @returns {Promise<void>}
  */
-export async function deployHelmChart(
-  releaseName: string,
-  genericChart: string,
-  namespace: string = 'default'
-): Promise<void> {
-  info('deploying works')
+export async function deployHelmChart(config: {
+  addedHelmRepositoryName: string
+  releaseName: string
+  chartVersion: string
+  chartName: string
+  valuesPath: string
+  namespace?: string
+}): Promise<void> {
+  try {
+    core.info('Deploying the helm')
+    execSync(
+      `helm upgrade --install --timeout 180s ${config.releaseName} ${
+        config.addedHelmRepositoryName
+      }/${config.chartName} -f ${config.valuesPath} --version ${
+        config.chartVersion
+      } ${
+        config?.namespace ? `-n ${config.namespace}` : ''
+      } --kubeconfig kubeconfig`,
+      {stdio: 'inherit', cwd: repositoryDirectory}
+    )
 
-  function wait() {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {}, 2000)
-    })
+    core.info('Deploying is done')
+  } catch (error) {
+    core.error('Deploying helm error')
+    errorHandler(error)
   }
-
-  execSync('kubectl get pods --kubeconfig=kubeconfig', {
-    stdio: 'inherit',
-    cwd: repositoryDirectory
-  })
 }
