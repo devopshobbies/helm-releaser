@@ -65,7 +65,7 @@ const core = __importStar(__nccwpck_require__(186));
 function addHelmRepository(repository, name = 'action-repo') {
     return __awaiter(this, void 0, void 0, function* () {
         core.info('Adding helm repository');
-        (0, child_process_1.execSync)(`helm add repo ${name} ${repository}`, {
+        (0, child_process_1.execSync)(`helm repo add ${name} ${repository}`, {
             stdio: 'inherit',
             cwd: repositoryDirectory_1.repositoryDirectory
         });

@@ -15,7 +15,7 @@ export async function addHelmRepository(
 ): Promise<string> {
   core.info('Adding helm repository')
 
-  execSync(`helm add repo ${name} ${repository}`, {
+  execSync(`helm repo add ${name} ${repository}`, {
     stdio: 'inherit',
     cwd: repositoryDirectory
   })
