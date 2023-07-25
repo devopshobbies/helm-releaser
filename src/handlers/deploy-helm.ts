@@ -29,7 +29,7 @@ export async function deployHelmChart(config: {
       }/${config.chartName} -f ${config.valuesPath} --version ${
         config.chartVersion
       } ${
-        config?.namespace ? `-n ${config.namespace}` : ''
+        config?.namespace ? `--namespace ${config.namespace}` : ''
       } --kubeconfig kubeconfig`,
       {stdio: 'inherit', cwd: repositoryDirectory}
     )
