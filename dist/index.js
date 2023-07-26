@@ -139,7 +139,10 @@ function deployHelmChart(config) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             core.info('Deploying the helm');
-            (0, child_process_1.execSync)(`helm upgrade --install --timeout 180s ${config.releaseName} ${config.addedHelmRepositoryName}/${config.chartName} -f ${config.valuesPath} --version ${config.chartVersion} ${(config === null || config === void 0 ? void 0 : config.namespace) ? `-n ${config.namespace}` : ''} --kubeconfig kubeconfig`, { stdio: 'inherit', cwd: repositoryDirectory_1.repositoryDirectory });
+            const namespaceFlag = config.namespace
+                ? `--namespace ${config.namespace}`
+                : '';
+            (0, child_process_1.execSync)(`helm upgrade --install --timeout 180s ${config.releaseName} ${config.addedHelmRepositoryName}/${config.chartName} -f ${config.valuesPath} --version ${config.chartVersion} ${namespaceFlag} --kubeconfig kubeconfig`, { stdio: 'inherit', cwd: repositoryDirectory_1.repositoryDirectory });
             core.info('Deploying is done');
         }
         catch (error) {
@@ -546,14 +549,17 @@ const add_helm_repo_1 = __nccwpck_require__(637);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const kubeConfig = core.getInput('kubeConfig', { required: true });
-            const releaseName = core.getInput('releaseName') || 'default';
-            const namespace = core.getInput('namespace');
-            const context = core.getInput('context');
+            const releaseName = core.getInput('releaseName', {
+                required: true,
+                trimWhitespace: true
+            });
             const chartRemote = core.getInput('remoteRepository', { required: true });
             const chartVersion = core.getInput('chartVersion', { required: true });
+            const kubeConfig = core.getInput('kubeConfig', { required: true });
             const chartName = core.getInput('chartName', { required: true });
+            const namespace = core.getInput('namespace') || 'default';
             const valuesPath = core.getInput('valuesPath');
+            const context = core.getInput('context');
             yield (0, install_kubectl_1.installKubectl)();
             yield (0, setup_kubectl_config_1.setupKubectlConfig)(kubeConfig);
             yield (0, install_helm_1.installHelm)();

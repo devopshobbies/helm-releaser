@@ -23,9 +23,8 @@ inputs:
     description: 'Kubernetes config file to connect'
 
   releaseName:
-    required: false
+    required: true
     description: 'The name of your release'
-    default: ${{ github.repository.name }}
 
   valuesPath:
     required: false

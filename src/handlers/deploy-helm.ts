@@ -23,14 +23,12 @@ export async function deployHelmChart(config: {
 }): Promise<void> {
   try {
     core.info('Deploying the helm')
+    const namespaceFlag = config.namespace
+      ? `--namespace ${config.namespace}`
+      : ''
+
     execSync(
-      `helm upgrade --install --timeout 180s ${config.releaseName} ${
-        config.addedHelmRepositoryName
-      }/${config.chartName} -f ${config.valuesPath} --version ${
-        config.chartVersion
-      } ${
-        config?.namespace ? `--namespace ${config.namespace}` : ''
-      } --kubeconfig kubeconfig`,
+      `helm upgrade --install --timeout 180s ${config.releaseName} ${config.addedHelmRepositoryName}/${config.chartName} -f ${config.valuesPath} --version ${config.chartVersion} ${namespaceFlag} --kubeconfig kubeconfig`,
       {stdio: 'inherit', cwd: repositoryDirectory}
     )
 

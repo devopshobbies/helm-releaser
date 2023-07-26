@@ -9,15 +9,18 @@ import {addHelmRepository} from './handlers/add-helm-repo'
 
 async function run(): Promise<void> {
   try {
-    const kubeConfig = core.getInput('kubeConfig', {required: true})
-    const releaseName = core.getInput('releaseName') || 'default'
-    const namespace = core.getInput('namespace')
-    const context = core.getInput('context')
+    const releaseName = core.getInput('releaseName', {
+      required: true,
+      trimWhitespace: true
+    })
 
     const chartRemote = core.getInput('remoteRepository', {required: true})
     const chartVersion = core.getInput('chartVersion', {required: true})
+    const kubeConfig = core.getInput('kubeConfig', {required: true})
     const chartName = core.getInput('chartName', {required: true})
+    const namespace = core.getInput('namespace') || 'default'
     const valuesPath = core.getInput('valuesPath')
+    const context = core.getInput('context')
 
     await installKubectl()
     await setupKubectlConfig(kubeConfig)
