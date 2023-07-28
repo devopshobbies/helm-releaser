@@ -2,26 +2,29 @@ name: 'Helm releaser'
 description: 'Combination of a big verity of features for deploying helm chart'
 author: 'devopshobbies'
 inputs:
-  genericChart:
+  remoteRepository:
     required: true
     description: 'The generic chart address'
+
+  chartName:
+    required: true
+    description: 'The chart name to get from remote chart'
+
+  chartVersion:
+    required: true
+    description: 'The version of your chart'
 
   context:
     required: false
     description: 'The kubernetes target context'
-
-  token:
-    required: true
-    description: 'Github token'
 
   kubeConfig:
     required: true
     description: 'Kubernetes config file to connect'
 
   releaseName:
-    required: false
+    required: true
     description: 'The name of your release'
-    default: ${{ github.repository.name }}
 
   valuesPath:
     required: false

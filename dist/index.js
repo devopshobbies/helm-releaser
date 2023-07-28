@@ -13,11 +13,103 @@ exports.repositoryDirectory = process.env.GITHUB_WORKSPACE;
 
 /***/ }),
 
+/***/ 637:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.addHelmRepository = void 0;
+const child_process_1 = __nccwpck_require__(81);
+const repositoryDirectory_1 = __nccwpck_require__(908);
+const core = __importStar(__nccwpck_require__(186));
+/**
+ * This will adds and updates the repository then
+ * returns the name of added repository
+ * @param repository
+ * @param name
+ * @returns {Promise<string>}
+ */
+function addHelmRepository(repository, name = 'action-repo') {
+    return __awaiter(this, void 0, void 0, function* () {
+        core.info('Adding helm repository');
+        (0, child_process_1.execSync)(`helm repo add ${name} ${repository}`, {
+            stdio: 'inherit',
+            cwd: repositoryDirectory_1.repositoryDirectory
+        });
+        core.info('updating helm repository');
+        (0, child_process_1.execSync)(`helm repo update`, {
+            stdio: 'inherit',
+            cwd: repositoryDirectory_1.repositoryDirectory
+        });
+        return name;
+    });
+}
+exports.addHelmRepository = addHelmRepository;
+
+
+/***/ }),
+
 /***/ 207:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -29,8 +121,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.deployHelmChart = void 0;
+const core = __importStar(__nccwpck_require__(186));
+const error_handler_1 = __nccwpck_require__(719);
 const child_process_1 = __nccwpck_require__(81);
-const core_1 = __nccwpck_require__(186);
+const repositoryDirectory_1 = __nccwpck_require__(908);
 /**
  * This method will installs the helm chart on target kubernetes cluster
  * please be noticed before using this you need to configure kubectl
@@ -41,16 +135,20 @@ const core_1 = __nccwpck_require__(186);
  * @param {string} namespace default value is 'default'
  * @returns {Promise<void>}
  */
-function deployHelmChart(releaseName, genericChart, namespace = 'default') {
+function deployHelmChart(config) {
     return __awaiter(this, void 0, void 0, function* () {
-        (0, core_1.info)('deploying works');
-        function wait() {
-            return new Promise((resolve, reject) => {
-                setTimeout(() => { }, 2000);
-            });
+        try {
+            core.info('Deploying the helm');
+            const namespaceFlag = config.namespace
+                ? `--namespace ${config.namespace}`
+                : '';
+            (0, child_process_1.execSync)(`helm upgrade --install --timeout 180s ${config.releaseName} ${config.addedHelmRepositoryName}/${config.chartName} -f ${config.valuesPath} --version ${config.chartVersion} ${namespaceFlag} --kubeconfig kubeconfig`, { stdio: 'inherit', cwd: repositoryDirectory_1.repositoryDirectory });
+            core.info('Deploying is done');
         }
-        (0, child_process_1.execSync)('kubectl get pods --kubeconfig=kubeconfig');
-        yield wait();
+        catch (error) {
+            core.error('Deploying helm error');
+            (0, error_handler_1.errorHandler)(error);
+        }
     });
 }
 exports.deployHelmChart = deployHelmChart;
@@ -447,24 +545,34 @@ const setup_kubectl_config_1 = __nccwpck_require__(453);
 const error_handler_1 = __nccwpck_require__(719);
 const deploy_helm_1 = __nccwpck_require__(207);
 const kubectl_set_context_1 = __nccwpck_require__(741);
+const add_helm_repo_1 = __nccwpck_require__(637);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const genericChart = core.getInput('genericChart', {
+            const releaseName = core.getInput('releaseName', {
                 required: true,
                 trimWhitespace: true
             });
-            const valuesPath = core.getInput('valuesPath');
-            const releaseName = core.getInput('releaseName');
-            const namespace = core.getInput('namespace');
-            const context = core.getInput('context');
-            const token = core.getInput('token', { required: true });
+            const chartRemote = core.getInput('remoteRepository', { required: true });
+            const chartVersion = core.getInput('chartVersion', { required: true });
             const kubeConfig = core.getInput('kubeConfig', { required: true });
+            const chartName = core.getInput('chartName', { required: true });
+            const namespace = core.getInput('namespace') || 'default';
+            const valuesPath = core.getInput('valuesPath');
+            const context = core.getInput('context');
             yield (0, install_kubectl_1.installKubectl)();
             yield (0, setup_kubectl_config_1.setupKubectlConfig)(kubeConfig);
             yield (0, install_helm_1.installHelm)();
             yield (0, kubectl_set_context_1.setKubectlContext)(context);
-            yield (0, deploy_helm_1.deployHelmChart)(releaseName, genericChart, namespace);
+            const addedHelmRepositoryName = yield (0, add_helm_repo_1.addHelmRepository)(chartRemote);
+            yield (0, deploy_helm_1.deployHelmChart)({
+                addedHelmRepositoryName,
+                releaseName,
+                chartVersion,
+                chartName,
+                valuesPath,
+                namespace
+            });
             return;
         }
         catch (error) {
