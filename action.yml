@@ -3,20 +3,20 @@ description: 'Combination of a big verity of features for deploying helm chart'
 author: 'devopshobbies'
 inputs:
   remoteRepository:
-    required: true
+    required: false
     description: 'The generic chart address'
 
+  chartPath:
+    required: false
+    description: 'If specified remote repository installation will be ignored'
+
   chartName:
-    required: true
+    required: false
     description: 'The chart name to get from remote chart'
 
   chartVersion:
-    required: true
-    description: 'The version of your chart'
-
-  context:
     required: false
-    description: 'The kubernetes target context'
+    description: 'The version of your chart'
 
   kubeConfig:
     required: true
@@ -30,6 +30,10 @@ inputs:
     required: false
     description: 'The values path to use it with generic chart'
     default: '.helm/values.yaml'
+
+  context:
+    required: false
+    description: 'The kubernetes target context'
 
   namespace:
     required: false
